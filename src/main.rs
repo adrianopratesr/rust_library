@@ -1,3 +1,5 @@
+mod domain;
+mod repositories;
 mod routes;
 
 #[tokio::main]
