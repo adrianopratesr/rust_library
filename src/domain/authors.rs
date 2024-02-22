@@ -1,12 +1,12 @@
 use chrono::{Date, DateTime, NaiveDate, Utc};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateAuthor {
-    name: String,
-    date_of_birth: NaiveDate,
+    pub name: String,
+    pub date_of_birth: NaiveDate,
 }
 
 #[derive(Deserialize, Debug)]
@@ -16,12 +16,12 @@ pub struct UpdateAuthor {
     date_of_birth: Option<NaiveDate>,
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Author {
-    author_id: Uuid,
-    name: String,
-    date_of_birth: NaiveDate,
-    creation_time: DateTime<Utc>,
-    deletion_time: Option<DateTime<Utc>>,
+    pub author_id: Uuid,
+    pub name: String,
+    pub date_of_birth: NaiveDate,
+    pub creation_time: DateTime<Utc>,
+    pub deletion_time: Option<DateTime<Utc>>,
 }

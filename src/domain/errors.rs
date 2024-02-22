@@ -1,5 +1,1 @@
-pub enum Error{
-    DatabaseError(Box <dyn std::error::Error>)
-}
-
-pub type Result<T> = std::result::Result<T, Error>;
+pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
