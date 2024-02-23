@@ -24,3 +24,29 @@ impl Handler {
             .ok_or(Error::AuthorNotFound(author_id))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::sync::Arc;
+
+    use super::*;
+    use crate::repositories::authors::MockAuthorRepository;
+
+    #[tokio::test]
+    async fn test_get_author() {
+        let mut repository = MockAuthorRepository::new();
+        let author_id = Uuid::default();
+
+        repository.expect_get_author().returning(|_| {
+            Err(Error::DatabaseError(sqlx::Error::Protocol(
+                Default::default(),
+            )))
+        });
+
+        let handler = Handler::new(Arc::new(repository));
+
+        let error = handler.get_author(author_id).await.unwrap_err();
+
+        assert!(matches!(error, Error::DatabaseError(..)));
+    }
+}

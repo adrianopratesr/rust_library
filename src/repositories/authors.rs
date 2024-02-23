@@ -6,6 +6,7 @@ use crate::domain::{
 use super::SqlxRepository;
 use uuid::Uuid;
 
+#[cfg_attr(test, mockall::automock)]
 #[async_trait::async_trait]
 pub trait AuthorRepository {
     async fn create_author(&self, author: CreateAuthor) -> Result<Author>;
