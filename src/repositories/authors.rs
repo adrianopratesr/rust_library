@@ -57,8 +57,8 @@ impl AuthorRepository for SqlxRepository {
             r#"
                 UPDATE authors
                 SET 
-                name = $1,
-                date_of_birth = $2,
+                name = COALESCE($1, name),
+                date_of_birth = COALESCE($2, date_of_birth),
                 updated_at = NOW()
                 WHERE author_id = $3
                 returning *
