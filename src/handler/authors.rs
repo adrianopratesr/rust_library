@@ -15,12 +15,12 @@ impl Handler {
         self.author_repository
             .get_author(author_id)
             .await?
-            .ok_or(Error::AuthorNotFound)
+            .ok_or(Error::AuthorNotFound(author_id))
     }
     pub async fn update_author(&self, author_id: Uuid, author: UpdateAuthor) -> Result<Author> {
         self.author_repository
             .update_author(author_id, author)
             .await?
-            .ok_or(Error::AuthorNotFound)
+            .ok_or(Error::AuthorNotFound(author_id))
     }
 }

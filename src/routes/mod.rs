@@ -10,7 +10,10 @@ pub(super) fn configure_routes() -> Router<Handler> {
 impl IntoResponse for Error {
     fn into_response(self) -> axum::response::Response {
         match self {
-            Self::AuthorNotFound => (StatusCode::NOT_FOUND, "Author not found".to_string()),
+            Self::AuthorNotFound(author_id) => (
+                StatusCode::NOT_FOUND,
+                format!("Author {author_id} not found"),
+            ),
             Self::DatabaseError(err) => (StatusCode::INTERNAL_SERVER_ERROR, format!("{err:?}")),
         }
         .into_response()
