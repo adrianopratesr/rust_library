@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use handler::Handler;
-use repositories::{authors::AuthorRepository, SqlxRepository};
+use repositories::{SqlxRepository};
 use sqlx::postgres::PgPoolOptions;
 mod domain;
 mod handler;
