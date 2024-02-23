@@ -35,16 +35,37 @@ async fn create_author(
     }
 }
 
-async fn get_author(Path(author_id): Path<Uuid>) -> impl IntoResponse {
-    (StatusCode::OK, format!("author_id = {author_id}"))
+async fn get_author(
+    State(repository): State<Arc<dyn AuthorRepository + Send + Sync>>,
+    Path(author_id): Path<Uuid>,
+) -> impl IntoResponse {
+    if let Ok(author) = repository.get_author(author_id).await {
+        if let Some(author) = author {
+            (StatusCode::OK, Json::from(Some(author)))
+        } else {
+            (StatusCode::NOT_FOUND, Json::from(None))
+        }
+    } else {
+        (StatusCode::UNPROCESSABLE_ENTITY, Json::from(None))
+    }
 }
 
 async fn update_author(
+    State(repository): State<Arc<dyn AuthorRepository + Send + Sync>>,
     Path(author_id): Path<Uuid>,
     Json(author): Json<UpdateAuthor>,
 ) -> impl IntoResponse {
-    (
-        StatusCode::OK,
-        format!("Update author {author:?} {}", author_id),
-    )
+    match repository.update_author(author_id, author).await {
+        Ok(author) => {
+            if let Some(author) = author {
+                (StatusCode::OK, Json::from(Some(author)))
+            } else {
+                (StatusCode::NOT_FOUND, Json::from(None))
+            }
+        }
+        Err(err) => {
+            dbg!(err);
+            (StatusCode::UNPROCESSABLE_ENTITY, Json::from(None))
+        }
+    }
 }
